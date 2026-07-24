@@ -3,6 +3,26 @@
 <!-- BEGIN GENERATED WORKFLOWS -->
 <br/>
 
+#### Workflow : Add to Collection
+
+| Workflow Name | Add to Collection |
+|---------------|---------------|
+| **Code** | XX_ADD_TO_COLLECTION |
+| **Description** | This agent workflow takes information regarding a new task from the user and creates a new task in user collections through the business object. |
+| **Exposed to Agentic Apps** | No |
+| **Input Parameters** | Optional REST inputs: `name`, `startDate`, `endDate`, `description`, `taskURL`, `chatHistory`, and `instructions`. The workflow can also collect missing task details conversationally. |
+| **Output Parameters** | Returns a success message with a deep link to the created task, a validation error message, or a prompt for any task details that still need to be provided. |
+
+#### Workflow : Display Insights
+
+| Workflow Name | Display Insights |
+|---------------|---------------|
+| **Code** | XX_DISPLAY_INSIGHTS |
+| **Description** | Retrieves tasks from the user's Journey Task Collection and task-status aggregations, generates task deep links, and renders the highest-priority open tasks as an insights message list. |
+| **Exposed to Agentic Apps** | Yes |
+| **Input Parameters** | No input parameters required |
+| **Output Parameters** | Retrieves self collection tasks from the `Journey Task Collections` Business Object and status counts from `Collection Task Aggregations`, then displays up to five tasks, ordered with overdue tasks first, including task name, description, due-status details, a status summary, and a navigation action. Root level description is generated from the status counts from `Collection Task Aggregations`. |
+
 #### Workflow : Overdue Onboarding Team Journeys
 
 | Workflow Name | Overdue Onboarding Team Journeys |

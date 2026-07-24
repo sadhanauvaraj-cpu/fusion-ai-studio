@@ -1,3 +1,14 @@
+### Change Log
+
+| **Date**| **Operation** | **File/folder** | **Description**|
+|--------------|---------------|---------------|---------------|
+| 2026-07-25| Updated |`release-26C/aistudio/bin/aistudio-skill.zip` |Updated to resolve authentication issues when connecting to the Fusion environment on the Windows platform|
+| 2026-07-25| Updated |`release-26C/aistudio/bin/aistudio-extension.zip` |Updated to resolve authentication issues when connecting to the Fusion environment on the Windows platform|
+| 2026-07-25| Added |`release-26C/aiapps/hcm/career-development` | Added career development workflows and business objects|
+| 2026-07-25| Updated |`release-26C/aiapps/hcm/human-resources` | Updated the descriptions and business object code reference in `xx_worker_card.wf`|
+| 2026-07-25| Updated |`release-26C/aiapps/hcm/absences` | Updated the descriptions and workflow `xx_team_upcoming_absences.wf`|
+---------------
+
 # Oracle Fusion AI Agent Studio Sample Apps and Workflows
 
 This repository provides samples demonstrating how to use Oracle AI Agent Studio to build apps, workflows, etc.
@@ -97,7 +108,7 @@ You can find the online documentation for Oracle Fusion AI Agent Studio at [offi
 
 ## Contributing
 
-This project do not accept accept external pull requests. Please [review our contribution guide](./CONTRIBUTING.md)
+This project do not accept external pull requests. Please [review our contribution guide](./CONTRIBUTING.md)
 
 ## Security
 

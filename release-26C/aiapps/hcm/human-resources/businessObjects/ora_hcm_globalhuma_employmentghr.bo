@@ -1,9 +1,6 @@
 {
   "_comment": "Copyright © 2026, Oracle and/or its affiliates. ** Licensed under the Universal Permissive License (UPL), Version 1.0  as shown at oss.oracle.com/licenses/upl",
   "supportedObjectId": "300100697003914",
-  "$context": {
-    "etag": "14"
-  },
   "name": "HCM GHR Employment",
   "description": "Provides Global Human Resources employment functions for assignment history, manager hierarchy, worker connections, seniority, compensation, performance, representatives, profiles, notes, and reporting counts.",
   "objectCode": "ORA_HCM_GLOBALHUMA_XX_EMPLOYMENTGHR",

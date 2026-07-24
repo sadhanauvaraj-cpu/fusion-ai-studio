@@ -1,9 +1,6 @@
 {
   "_comment": "Copyright © 2026, Oracle and/or its affiliates. ** Licensed under the Universal Permissive License (UPL), Version 1.0  as shown at oss.oracle.com/licenses/upl",
   "supportedObjectId": "300100663913467",
-  "$context": {
-    "etag": "2"
-  },
   "name": "Period Expression Resolver",
   "description": "The Resolve Period Expression Business Object converts relative period expressions into specific accounting period values to support Insights rule execution within the General Ledger domain. It provides a focused operation to process these expressions, enabling accurate period resolution for financial analysis and reporting.",
   "objectCode": "ORA_FIN_GL_XX_PERIOD_EXPRESSION_RESOLVER",

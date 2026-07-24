@@ -6,7 +6,7 @@
 
 | **Name** | Learning Searches |
 |---------------|---------------|
-| **Code** | ORA_HCM_BENEFITS_XX_PERSONLIFEEVENTSTATUSAGGREGATIONS |
+| **Code** | ORA_HCM_LEARNING_XX_LEARNINGSEARCHES |
 | **Description** | The Learning Searches Business Object enables advanced searching and aggregation of learning records within the LEARNING product. It supports retrieving summarized data by learner, learning item, and enrollment status, as well as detailed searches of learning item records. With its focus on aggregation and search operations, it facilitates comprehensive insights into learning activities and related enrollment data. |
 
 
@@ -34,3 +34,9 @@ Description : This business object fucntion searches learning item records by le
 | **Parameter Name** | **Description**|
 |---------------|---------------|
 | learningItemId | Primary key identifier for the learning item id to search the learning records for a learning item |
+
+### Function : get_current_learning
+Description : Fetches the logged-in learner's current learning assignments and their status, due dates, and course details.
+
+| **Parameter Name** | **Description**|
+|---------------|---------------|
