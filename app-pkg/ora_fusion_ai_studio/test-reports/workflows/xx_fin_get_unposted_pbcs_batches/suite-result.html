@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workflow Test Suite Result</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+      color: #263238;
+      background: #fff;
+    }
+    h1 {
+      color: #1f3545;
+      border-bottom: 2px solid #2f78b7;
+      padding-bottom: 10px;
+      margin-top: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    h2 {
+      color: #34495e;
+      margin-top: 28px;
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 18px 0 24px;
+    }
+    .metric, .section {
+      background: #f8f9fa;
+      border: 1px solid #e0e5ea;
+      border-radius: 5px;
+      padding: 14px 16px;
+    }
+    .summary-card {
+      background: #f8f9fa;
+      border: 1px solid #e0e5ea;
+      border-radius: 5px;
+      padding: 14px 16px;
+      min-width: 0;
+    }
+    .summary-card h2 { color: #1f3545; font-size: 15px; margin: 0 0 10px; }
+    .summary-card__items { display: grid; gap: 8px; }
+    .summary-card__item { min-width: 0; }
+    .summary-card__item .label { margin-bottom: 1px; }
+    .summary-card__item .value { display: block; }
+    .report-overview {
+      margin: 18px 0 24px;
+      border: 1px solid #d7dee5;
+      border-radius: 5px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .report-overview__status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 16px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #d7dee5;
+    }
+    .report-overview--passed .report-overview__status {
+      background: #f4faf7;
+      box-shadow: inset 4px 0 0 #2d7a52;
+    }
+    .report-overview--failed .report-overview__status {
+      background: #fff6f5;
+      box-shadow: inset 4px 0 0 #b63b31;
+    }
+    .report-overview--neutral .report-overview__status {
+      background: #fff9ef;
+      box-shadow: inset 4px 0 0 #b26a00;
+    }
+    .report-overview__status-copy {
+      color: #34495e;
+      font-weight: 600;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .report-overview__groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .report-overview__group {
+      min-width: 0;
+      padding: 16px;
+    }
+    .report-overview__group + .report-overview__group {
+      border-left: 1px solid #e0e5ea;
+    }
+    .report-overview__group h2 {
+      margin: 0 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #d7dee5;
+      color: #1f3545;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .report-overview__facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 18px;
+    }
+    .report-overview__fact { min-width: 0; }
+    .report-overview__fact--wide { grid-column: 1 / -1; }
+    .report-overview__fact .label {
+      margin-bottom: 3px;
+      color: #607080;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+    .report-overview__fact .value {
+      display: block;
+      color: #1f3545;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    .report-identity { color: #607080; margin: -8px 0 18px; overflow-wrap: anywhere; }
+    .report-section { scroll-margin-top: 16px; }
+    .verification-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+    .verification-item {
+      display: block;
+      min-width: 0;
+      padding: 10px 12px;
+      color: inherit;
+      text-decoration: none;
+      background: #fff;
+      border: 1px solid #d7dee5;
+      border-left: 4px solid #607080;
+      border-radius: 5px;
+    }
+    .verification-item:hover,
+    .verification-item:focus-visible {
+      background: #f3f8fc;
+      border-color: #8fb8d8;
+      outline: 2px solid transparent;
+    }
+    .verification-item--passed { border-left-color: #2d7a52; }
+    .verification-item--failed { border-left-color: #b63b31; }
+    .verification-item--neutral { border-left-color: #b26a00; }
+    .verification-item .value {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .conversation-journey { display: grid; gap: 8px; }
+    .conversation-journey__step { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(220px, 1.6fr) minmax(130px, .7fr); gap: 12px; align-items: start; border-bottom: 1px solid #e0e5ea; padding: 8px 0; }
+    .conversation-journey__cell {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .conversation-journey__cell code {
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .conversation-journey__step:last-child { border-bottom: 0; }
+    .report-disclosure > summary { padding: 4px 0; }
+    .report-disclosure[open] > summary { margin-bottom: 10px; }
+    .label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: #607080;
+      margin-bottom: 4px;
+    }
+    .value {
+      font-weight: 600;
+      color: #1f3545;
+      word-break: break-word;
+    }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow-wrap: normal;
+    }
+    .pill.passed { background: #e7f5ee; color: #176b43; }
+    .pill.failed { background: #fdeceb; color: #a1271d; }
+    .pill.neutral { background: #eef3f7; color: #435466; }
+    .tag-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin: 2px 4px 2px 0;
+      font-size: 12px;
+      font-weight: 600;
+      background: #eef3f7;
+      color: #435466;
+      overflow-wrap: anywhere;
+    }
+    .case-list, .action-list {
+      display: grid;
+      gap: 12px;
+    }
+    .case-card, .action-item {
+      border: 1px solid #d7dee5;
+      border-radius: 6px;
+      background: #fff;
+      padding: 14px;
+    }
+    .case-card__header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .case-card__title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      min-width: 0;
+    }
+    .case-card__name {
+      font-weight: 700;
+      color: #1f3545;
+      overflow-wrap: anywhere;
+    }
+    .case-card__meta, .case-card__detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px 12px;
+      margin-top: 10px;
+    }
+    .case-fact {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .node-pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .node-pill-list code {
+      display: inline-block;
+      border-radius: 4px;
+      padding: 2px 6px;
+      background: #f1f2f6;
+      overflow-wrap: anywhere;
+    }
+    .scroll-table {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+    .scroll-table table {
+      min-width: 1500px;
+      table-layout: fixed;
+    }
+    .scroll-table table.report-compact-table {
+      min-width: 900px;
+      table-layout: auto;
+    }
+    .scroll-table table.report-wide-table {
+      min-width: 1200px;
+      table-layout: auto;
+    }
+    .scroll-table th {
+      overflow-wrap: normal;
+      white-space: nowrap;
+      word-break: normal;
+    }
+    .scroll-table table.verification-detail-table {
+      min-width: 1020px;
+    }
+    .verification-detail-table th:last-child,
+    .verification-detail-table td:last-child {
+      min-width: 220px;
+    }
+    .scroll-table table.path-assertions-table {
+      min-width: 1100px;
+      table-layout: auto;
+    }
+    .path-assertions-table th:nth-last-child(2),
+    .path-assertions-table td:nth-last-child(2) {
+      min-width: 240px;
+    }
+    .path-assertions-table th:last-child,
+    .path-assertions-table td:last-child {
+      min-width: 220px;
+    }
+    .path-assertions-table code {
+      overflow-wrap: anywhere;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .scroll-table table.node-assertions-table {
+      width: 1530px;
+      min-width: 1530px;
+      max-width: none;
+      table-layout: fixed;
+    }
+    .node-assertions-table:not(.node-assertions-table--conversation) th:nth-child(1),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(1) { width: 110px; }
+    .node-assertions-table:not(.node-assertions-table--conversation) th:nth-child(2),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(2) { width: 240px; }
+    .node-assertions-table:not(.node-assertions-table--conversation) th:nth-child(3),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(3) { width: 240px; }
+    .node-assertions-table:not(.node-assertions-table--conversation) th:nth-child(4),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(4) { width: 110px; }
+    .node-assertions-table:not(.node-assertions-table--conversation) th:nth-child(5),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(5) { width: 300px; }
+    .node-assertions-table:not(.node-assertions-table--conversation) th:nth-child(6),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(6) { width: 130px; }
+    .node-assertions-table:not(.node-assertions-table--conversation) th:nth-child(7),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(7) { width: 180px; }
+    .node-assertions-table:not(.node-assertions-table--conversation) th:nth-child(8),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(8) { width: 220px; }
+    .scroll-table table.node-assertions-table--conversation {
+      width: 1710px;
+      min-width: 1710px;
+    }
+    .node-assertions-table--conversation th:nth-child(1),
+    .node-assertions-table--conversation td:nth-child(1) { width: 180px; }
+    .node-assertions-table--conversation th:nth-child(2),
+    .node-assertions-table--conversation td:nth-child(2) { width: 110px; }
+    .node-assertions-table--conversation th:nth-child(3),
+    .node-assertions-table--conversation td:nth-child(3) { width: 240px; }
+    .node-assertions-table--conversation th:nth-child(4),
+    .node-assertions-table--conversation td:nth-child(4) { width: 240px; }
+    .node-assertions-table--conversation th:nth-child(5),
+    .node-assertions-table--conversation td:nth-child(5) { width: 110px; }
+    .node-assertions-table--conversation th:nth-child(6),
+    .node-assertions-table--conversation td:nth-child(6) { width: 300px; }
+    .node-assertions-table--conversation th:nth-child(7),
+    .node-assertions-table--conversation td:nth-child(7) { width: 130px; }
+    .node-assertions-table--conversation th:nth-child(8),
+    .node-assertions-table--conversation td:nth-child(8) { width: 180px; }
+    .node-assertions-table--conversation th:nth-child(9),
+    .node-assertions-table--conversation td:nth-child(9) { width: 220px; }
+    .node-assertions-table td {
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+    .node-assertions-table code {
+      overflow-wrap: anywhere;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(1),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(4),
+    .node-assertions-table:not(.node-assertions-table--conversation) td:nth-child(6),
+    .node-assertions-table--conversation td:nth-child(2),
+    .node-assertions-table--conversation td:nth-child(5),
+    .node-assertions-table--conversation td:nth-child(7) {
+      white-space: nowrap;
+    }
+    .scroll-table table.runtime-metrics-table {
+      min-width: 900px;
+      table-layout: fixed;
+    }
+    .scroll-table table.runtime-metrics-table--token {
+      min-width: 1680px;
+    }
+    .scroll-table table.runtime-metrics-table--duration {
+      min-width: 1040px;
+    }
+    .scroll-table table.runtime-metrics-table--ai-units {
+      min-width: 1280px;
+    }
+    .runtime-metrics-table th,
+    .runtime-metrics-table td {
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+    .runtime-metrics-table code {
+      white-space: nowrap;
+    }
+    .runtime-metrics-table__step code,
+    .runtime-metrics-table__node code {
+      overflow-wrap: anywhere;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .runtime-metrics-table__wrap,
+    .runtime-metrics-table__wrap code {
+      overflow-wrap: anywhere;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .runtime-details {
+      margin: 0;
+    }
+    .runtime-details pre {
+      max-height: 360px;
+      margin: 8px 0 0;
+    }
+    .judge-criteria-table {
+      min-width: 840px;
+      table-layout: fixed;
+    }
+    .judge-criteria-table th,
+    .judge-criteria-table td {
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+    .judge-criteria-table__text {
+      overflow-wrap: anywhere;
+      word-break: normal;
+    }
+    .scroll-table table.model-overrides-table {
+      width: 1780px;
+      min-width: 1780px;
+      max-width: none;
+      table-layout: fixed;
+    }
+    .model-overrides-table th,
+    .model-overrides-table td {
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+    .model-overrides-table__wrap,
+    .model-overrides-table__wrap code {
+      overflow-wrap: anywhere;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .model-overrides-table__nowrap {
+      white-space: nowrap;
+    }
+    .monospace-wrap {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .scroll-table table.suite-diagnostic-table {
+      width: 6200px;
+      min-width: 6200px;
+      max-width: none;
+      table-layout: fixed;
+    }
+    .scroll-table table.app-diagnostic-table {
+      width: 3530px;
+      min-width: 3530px;
+      max-width: none;
+      table-layout: fixed;
+    }
+    .scroll-table table.widget-diagnostic-table {
+      width: 1940px;
+      min-width: 1940px;
+      max-width: none;
+      table-layout: fixed;
+    }
+    .scroll-table table.consolidated-case-table {
+      width: 1950px;
+      min-width: 1950px;
+      max-width: none;
+      table-layout: fixed;
+    }
+    .suite-diagnostic-table th,
+    .app-diagnostic-table th,
+    .widget-diagnostic-table th,
+    .consolidated-case-table th {
+      white-space: nowrap;
+    }
+    .suite-diagnostic-table td,
+    .app-diagnostic-table td,
+    .widget-diagnostic-table td,
+    .consolidated-case-table td {
+      overflow: hidden;
+      overflow-wrap: anywhere;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .suite-diagnostic-table__wrap,
+    .suite-diagnostic-table__wrap code,
+    .app-diagnostic-table__wrap,
+    .app-diagnostic-table__wrap code,
+    .widget-diagnostic-table__wrap,
+    .widget-diagnostic-table__wrap code,
+    .consolidated-case-table__wrap,
+    .consolidated-case-table__wrap code {
+      overflow-wrap: anywhere;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .diagnostic-path-line {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .diagnostic-path-spacer {
+      height: 10px;
+    }
+    .action-item.failed {
+      border-left: 4px solid #a1271d;
+    }
+    .action-item.needs-judge {
+      border-left: 4px solid #b26a00;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #d7dee5;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    th {
+      background: #eaf4fb;
+      color: #1f3545;
+    }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+    }
+    .report-file-path {
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #f1f2f6;
+      border-left: 4px solid #2f78b7;
+      padding: 12px;
+      overflow-x: auto;
+    }
+    iframe.rendered-output {
+      width: 100%;
+      min-height: 260px;
+      border: 1px solid #d7dee5;
+      border-radius: 5px;
+      background: #fff;
+    }
+    details {
+      margin-top: 12px;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #1f3545;
+    }
+    .warning {
+      border-left: 4px solid #b26a00;
+      background: #fff8ec;
+    }
+    a { color: #236da8; }
+    ul { padding-left: 22px; }
+    @media (max-width: 720px) {
+      body { padding: 14px; }
+      .summary { grid-template-columns: 1fr; }
+      .conversation-journey__step { grid-template-columns: 1fr; gap: 4px; }
+      .metric, .section, .summary-card { padding: 12px; }
+      .report-overview__groups { grid-template-columns: 1fr; }
+      .report-overview__group + .report-overview__group {
+        border-left: 0;
+        border-top: 1px solid #e0e5ea;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Workflow Test Suite Result</h1>
+  <section class="report-overview report-overview--passed"><div class="report-overview__status"><span class="pill passed">passed</span><span class="report-overview__status-copy">All 1 workflow test passed.</span></div><div class="report-overview__groups"><section class="report-overview__group"><h2>Results</h2><div class="report-overview__facts"><div class="report-overview__fact"><span class="label">Passed</span><span class="value">1 / 1</span></div><div class="report-overview__fact report-overview__fact--wide"><span class="label">Judging</span><span class="value">no judge required</span></div></div></section><section class="report-overview__group"><h2>Run Configuration</h2><div class="report-overview__facts"><div class="report-overview__fact report-overview__fact--wide"><span class="label">Workflow</span><span class="value">XX_FIN_GET_UNPOSTED_PBCS_BATCHES</span></div><div class="report-overview__fact"><span class="label">Workflow Target</span><span class="value">DRAFT v85584538</span></div><div class="report-overview__fact"><span class="label">Data Source</span><span class="value">file</span></div><div class="report-overview__fact"><span class="label">Evaluation Mode</span><span class="value">deterministic</span></div></div></section><section class="report-overview__group"><h2>Runtime Metrics</h2><div class="report-overview__facts"><div class="report-overview__fact"><span class="label">Test Run Time</span><span class="value">1301 ms</span></div><div class="report-overview__fact"><span class="label">Workflow Execution Time</span><span class="value">46 ms</span></div><div class="report-overview__fact report-overview__fact--wide"><span class="label">Token Usage</span><span class="value">not emitted</span></div><div class="report-overview__fact report-overview__fact--wide"><span class="label">AI Units</span><span class="value">no-token-data (0/1 cases computed)</span></div></div></section></div></section>
+  <div class="section">
+    <h2>Summary</h2>
+    <pre>Workflow test suite passed: 1/1 passed, 0 failed, 0 needs judge.
+Filters: workflowCode=XX_FIN_GET_UNPOSTED_PBCS_BATCHES, workflowCodes=XX_FIN_GET_UNPOSTED_PBCS_BATCHES.
+
+Reports:
+- Workflow suite report: [suite-result.html](&lt;C:\001DDrive\AI Agent CLI\fusion-ai-studio\app-pkg\ora_fusion_ai_studio\test-reports\workflows\xx_fin_get_unposted_pbcs_batches\suite-result.html&gt;)
+
+Metrics:
+- Token data: not emitted for 1 cases.
+- AI units: no-token-data (0/1 cases computed).
+- Latency: total workflow time 46 ms across 1/1 cases.
+
+Optimization:
+- Model optimization sweep is not applicable for this suite. No matched workflow has LLM, AGENT, or model-configurable semantic-output nodes. There is no model placement to optimize.
+
+Tests:
+1. primary-path | passed | Record representative environment data once, replay it from the test file, and v...</pre>
+    <ul>
+      <li><a href="suite-result.json">JSON suite report</a></li>
+      <li><a href="suite-result.md">Markdown suite report</a></li>
+    </ul>
+  </div>
+  
+  <div class="section">
+    <h2>Active Filters</h2>
+    <div class="case-card__meta">
+      <div class="case-fact"><span class="label">Workflow</span><span class="value">XX_FIN_GET_UNPOSTED_PBCS_BATCHES</span></div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2>Cases</h2>
+    <div class="case-list"><article class="case-card">
+    <div class="case-card__header">
+      <div class="case-card__title">
+        <span class="pill passed">passed</span>
+        <span class="case-card__name">primary-path</span>
+        
+      </div>
+      <a href="primary-path/result.html">Test report</a>
+    </div>
+    <div class="case-card__meta">
+      <div class="case-fact"><span class="label">Workflow</span><span class="value">XX_FIN_GET_UNPOSTED_PBCS_BATCHES</span></div>
+      
+      <div class="case-fact"><span class="label">Data source</span><span class="value">file</span></div>
+      <div class="case-fact"><span class="label">Evaluation</span><span class="value">deterministic</span></div>
+      
+      <div class="case-fact"><span class="label">Deterministic</span><span class="value">passed: 9/9 checks</span></div>
+      <div class="case-fact"><span class="label">Judge</span><span class="value">skipped: evaluation-mode deterministic skips judge evaluation.</span></div>
+      <div class="case-fact"><span class="label">Test run time</span><span class="value">1301 ms</span></div>
+      <div class="case-fact"><span class="label">Workflow time</span><span class="value">46 ms</span></div>
+      <div class="case-fact"><span class="label">Tokens</span><span class="value">Not emitted</span></div>
+      <div class="case-fact"><span class="label">AI Units</span><span class="value">no-token-data</span></div>
+      
+    </div>
+    <details>
+      <summary>Details</summary>
+      <div class="case-card__detail-grid">
+        <div class="case-fact"><span class="label">Purpose</span>Retrieve all non-posted PBCS journal batches across all accounting periods and verify pagination and the final result.</div>
+        <div class="case-fact"><span class="label">Test Intent</span>Record representative environment data once, replay it from the test file, and verify the primary workflow path and final output.</div>
+        
+        
+        <div class="case-fact"><span class="label">Capture policy</span>record-now</div>
+        <div class="case-fact"><span class="label">Capture modes</span>raw: 1</div>
+        <div class="case-fact"><span class="label">Warnings</span>none</div>
+        <div class="case-fact"><span class="label">Failure</span>none</div>
+      </div>
+      <h3>Invocation</h3>
+      <p><strong>Trigger:</strong> rest</p>
+
+<p><strong>Message:</strong> (empty)</p>
+<p><strong>Single Turn:</strong> yes</p>
+<pre>{}</pre>
+      <h3>Path Assertions</h3>
+      <div class="case-card__detail-grid">
+<div class="case-fact"><span class="label">Must execute</span><span class="node-pill-list"><code>INITIALIZE_PAGINATION</code><code>INITIALIZE_BATCH_STATE</code><code>FETCH_ALL_BATCH_PAGES</code><code>FETCH_PBCS_BATCH_PAGE</code><code>COLLECT_BATCH_PAGE</code><code>ADVANCE_BATCH_PAGE</code><code>RETURN_JOURNAL_BATCHES</code></span></div>
+<div class="case-fact"><span class="label">Must not execute</span><span>none</span></div>
+</div>
+      
+    </details>
+  </article></div>
+    <details>
+    <summary>Show raw diagnostic table</summary>
+    <div class="scroll-table">
+      <table class="suite-diagnostic-table">
+        <colgroup><col style="width: 130px"><col style="width: 360px"><col style="width: 340px"><col style="width: 180px"><col style="width: 240px"><col style="width: 420px"><col style="width: 140px"><col style="width: 140px"><col style="width: 520px"><col style="width: 210px"><col style="width: 220px"><col style="width: 160px"><col style="width: 200px"><col style="width: 520px"><col style="width: 140px"><col style="width: 150px"><col style="width: 130px"><col style="width: 140px"><col style="width: 130px"><col style="width: 340px"><col style="width: 150px"><col style="width: 340px"><col style="width: 340px"><col style="width: 120px"></colgroup>
+        <thead><tr><th>Status</th><th>Workflow</th><th>Test</th><th>Tags</th><th>Run label</th><th>Purpose</th><th>Data source</th><th>Evaluation</th><th>Invocation</th><th>Deterministic</th><th>Judge</th><th>Capture policy</th><th>Capture modes</th><th>Path</th><th>Test Run Time</th><th>Workflow Time</th><th>Input Tokens</th><th>Output Tokens</th><th>Total Tokens</th><th>Observed Model(s)</th><th>AI Units</th><th>Warnings</th><th>Failure</th><th>Report</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><span class="pill passed">passed</span></td>
+        <td class="suite-diagnostic-table__wrap">XX_FIN_GET_UNPOSTED_PBCS_BATCHES</td>
+        <td class="suite-diagnostic-table__wrap">primary-path</td>
+        <td class="suite-diagnostic-table__wrap"></td>
+        <td class="suite-diagnostic-table__wrap"></td>
+        <td class="suite-diagnostic-table__wrap">Retrieve all non-posted PBCS journal batches across all accounting periods and verify pagination and the final result.</td>
+        <td>file</td>
+        <td>deterministic</td>
+        <td class="suite-diagnostic-table__wrap monospace-wrap">trigger: rest; message: (empty); single turn; parameters: {}</td>
+        <td class="suite-diagnostic-table__wrap">passed: 9/9 checks</td>
+        <td class="suite-diagnostic-table__wrap">skipped: evaluation-mode deterministic skips judge evaluation.</td>
+        <td>record-now</td>
+        <td class="suite-diagnostic-table__wrap">raw: 1</td>
+        <td class="suite-diagnostic-table__wrap"><div class="diagnostic-path-line">executes INITIALIZE_PAGINATION, INITIALIZE_BATCH_STATE, FETCH_ALL_BATCH_PAGES, FETCH_PBCS_BATCH_PAGE, COLLECT_BATCH_PAGE, ADVANCE_BATCH_PAGE, RETURN_JOURNAL_BATCHES</div></td>
+        <td>1301 ms</td>
+        <td>46 ms</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="suite-diagnostic-table__wrap"></td>
+        <td>no-token-data</td>
+        <td class="suite-diagnostic-table__wrap"></td>
+        <td class="suite-diagnostic-table__wrap"></td>
+        <td><a href="primary-path/result.html">Test report</a></td>
+      </tr></tbody>
+      </table>
+    </div>
+  </details>
+  </div>
+</body>
+</html>

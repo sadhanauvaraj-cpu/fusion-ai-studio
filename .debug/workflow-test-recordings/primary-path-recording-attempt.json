@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "kind": "workflow-test-recording-attempt",
+  "startedAt": "2026-09-17T13:31:09.618Z",
+  "finishedAt": "2026-09-17T13:31:14.120Z",
+  "status": "recorded",
+  "testName": "primary-path",
+  "workflowCode": "XX_FIN_GET_UNPOSTED_PBCS_BATCHES",
+  "testFile": "app-pkg/ora_fusion_ai_studio/tests/ai/self/oraFusionAiStudio/workflows/xx_fin_get_unposted_pbcs_batches/primary-path.json",
+  "input": {
+    "message": "",
+    "triggerType": "rest",
+    "parameters": {},
+    "singleTurnOnly": true
+  },
+  "dataSource": "live",
+  "debugRun": {
+    "jobId": "5ed00da3-5651-45eb-9ca3-46e6b22abae6",
+    "finishReason": "stop",
+    "rawEventCount": 12,
+    "finalOutputPreview": "{\"result\":{\"sourceName\":\"PBCS\",\"postingStatusFilter\":\"Not Posted\",\"count\":0,\"items\":[],\"pagesFetched\":1,\"hasMore\":false,\"message\":\"No non-posted PBCS journal batches were found.\"},\"console\":\"\",\"timedOut\":false}"
+  },
+  "expectedRecordableNodes": [
+    "FETCH_PBCS_BATCH_PAGE"
+  ],
+  "executedNodes": [
+    "ADVANCE_BATCH_PAGE",
+    "COLLECT_BATCH_PAGE",
+    "FETCH_ALL_BATCH_PAGES",
+    "FETCH_PBCS_BATCH_PAGE",
+    "INITIALIZE_BATCH_STATE",
+    "INITIALIZE_PAGINATION",
+    "RETURN_JOURNAL_BATCHES",
+    "START",
+    "START_BATCH_PAGES"
+  ],
+  "recordableNodes": [
+    {
+      "nodeCode": "FETCH_PBCS_BATCH_PAGE",
+      "nodeType": "BO_FUNCTION",
+      "expected": true,
+      "executed": true,
+      "captured": true,
+      "captureMode": "raw",
+      "source": "live-debug-api",
+      "inputCaptured": true,
+      "outputCaptured": true,
+      "outputBytes": 249,
+      "eventTypes": [
+        "NODE_START",
+        "NODE_END"
+      ]
+    }
+  ]
+}

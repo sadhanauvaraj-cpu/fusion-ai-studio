@@ -1,0 +1,170 @@
+{
+  "status": "passed",
+  "dataSource": "file",
+  "evaluationMode": "deterministic",
+  "startedAt": "2026-09-17T13:31:42.787Z",
+  "finishedAt": "2026-09-17T13:31:44.088Z",
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "needsJudge": 0
+  },
+  "filters": {
+    "workflowCode": "XX_FIN_GET_UNPOSTED_PBCS_BATCHES",
+    "workflowCodes": [
+      "XX_FIN_GET_UNPOSTED_PBCS_BATCHES"
+    ]
+  },
+  "results": [
+    {
+      "testFile": "app-pkg/ora_fusion_ai_studio/tests/ai/self/oraFusionAiStudio/workflows/xx_fin_get_unposted_pbcs_batches/primary-path.json",
+      "testName": "primary-path",
+      "scenario": {
+        "custom": false,
+        "source": "sync-plan",
+        "id": "primary-path",
+        "kind": "primary-path",
+        "intent": "Record representative environment data once, replay it from the test file, and verify the primary workflow path and final output."
+      },
+      "scenarioId": "primary-path",
+      "scenarioKind": "primary-path",
+      "executionMode": "single-turn",
+      "stepCount": 1,
+      "displayOrder": 900000000,
+      "purpose": "Retrieve all non-posted PBCS journal batches across all accounting periods and verify pagination and the final result.",
+      "displayPurpose": "Record representative environment data once, replay it from the test file, and v...",
+      "workflowCode": "XX_FIN_GET_UNPOSTED_PBCS_BATCHES",
+      "workflow": {
+        "workflowCode": "XX_FIN_GET_UNPOSTED_PBCS_BATCHES",
+        "status": "DRAFT",
+        "version": 85584538
+      },
+      "status": "passed",
+      "input": {
+        "message": "",
+        "triggerType": "rest",
+        "parameters": {},
+        "singleTurnOnly": true
+      },
+      "dataSource": "file",
+      "evaluationMode": "deterministic",
+      "judge": {
+        "status": "skipped",
+        "minimumScore": 4,
+        "reason": "evaluation-mode deterministic skips judge evaluation."
+      },
+      "testData": {
+        "capturePolicy": "record-now",
+        "captureModes": {
+          "FETCH_PBCS_BATCH_PAGE": "raw"
+        },
+        "nodes": {
+          "FETCH_PBCS_BATCH_PAGE": {
+            "nodeType": "BO_FUNCTION",
+            "captureMode": "raw",
+            "responseTruncated": false,
+            "itemCount": 0,
+            "responseBytes": 249
+          }
+        }
+      },
+      "pathAssertions": {
+        "mustExecute": [
+          {
+            "id": "path-must-execute-initialize_pagination",
+            "name": "INITIALIZE_PAGINATION executes",
+            "nodeCode": "INITIALIZE_PAGINATION"
+          },
+          {
+            "id": "path-must-execute-initialize_batch_state",
+            "name": "INITIALIZE_BATCH_STATE executes",
+            "nodeCode": "INITIALIZE_BATCH_STATE"
+          },
+          {
+            "id": "path-must-execute-fetch_all_batch_pages",
+            "name": "FETCH_ALL_BATCH_PAGES executes",
+            "nodeCode": "FETCH_ALL_BATCH_PAGES"
+          },
+          {
+            "id": "path-must-execute-fetch_pbcs_batch_page",
+            "name": "FETCH_PBCS_BATCH_PAGE executes",
+            "nodeCode": "FETCH_PBCS_BATCH_PAGE"
+          },
+          {
+            "id": "path-must-execute-collect_batch_page",
+            "name": "COLLECT_BATCH_PAGE executes",
+            "nodeCode": "COLLECT_BATCH_PAGE"
+          },
+          {
+            "id": "path-must-execute-advance_batch_page",
+            "name": "ADVANCE_BATCH_PAGE executes",
+            "nodeCode": "ADVANCE_BATCH_PAGE"
+          },
+          {
+            "id": "path-must-execute-return_journal_batches",
+            "name": "RETURN_JOURNAL_BATCHES executes",
+            "nodeCode": "RETURN_JOURNAL_BATCHES"
+          }
+        ],
+        "mustNotExecute": []
+      },
+      "durationMs": 1301,
+      "workflowTimeMs": 46,
+      "deterministicFailures": [],
+      "assertionSummary": {
+        "total": 9,
+        "passed": 9,
+        "failed": 0
+      },
+      "runtimeMetrics": {
+        "durationMs": 1301,
+        "workflowTimeMs": 46,
+        "tokenUsage": {
+          "status": "not-emitted-by-runtime",
+          "aggregate": {
+            "sourceFields": []
+          },
+          "nodes": {}
+        },
+        "nodeDurations": {
+          "FETCH_PBCS_BATCH_PAGE": {
+            "totalNodeTime": 46,
+            "details": []
+          }
+        },
+        "observed": {},
+        "aiUnits": {
+          "status": "no-token-data"
+        }
+      },
+      "reportPath": "C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\primary-path\\result.json",
+      "markdownReportPath": "C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\primary-path\\result.md",
+      "htmlReportPath": "C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\primary-path\\result.html"
+    }
+  ],
+  "summaryText": "Workflow test suite passed: 1/1 passed, 0 failed, 0 needs judge.\nFilters: workflowCode=XX_FIN_GET_UNPOSTED_PBCS_BATCHES, workflowCodes=XX_FIN_GET_UNPOSTED_PBCS_BATCHES.\n\nReports:\n- Workflow suite report: [suite-result.html](<C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\suite-result.html>)\n\nMetrics:\n- Token data: not emitted for 1 cases.\n- AI units: no-token-data (0/1 cases computed).\n- Latency: total workflow time 46 ms across 1/1 cases.\n\nOptimization:\n- Model optimization sweep is not applicable for this suite. No matched workflow has LLM, AGENT, or model-configurable semantic-output nodes. There is no model placement to optimize.\n\nTests:\n1. primary-path | passed | Record representative environment data once, replay it from the test file, and v...",
+  "tokenUsageSummary": {
+    "observedCases": 0,
+    "totalCases": 1,
+    "aggregate": {
+      "sourceFields": []
+    }
+  },
+  "aiUnitsSummary": {
+    "status": "no-token-data",
+    "totalAiUnits": 0,
+    "totalTokenUnits": 0,
+    "computedCases": 0,
+    "totalCases": 1
+  },
+  "optimization": {
+    "available": false,
+    "status": "not-applicable",
+    "reason": "No matched workflow has LLM, AGENT, or model-configurable semantic-output nodes. There is no model placement to optimize."
+  },
+  "nextActions": [],
+  "reportPath": "C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\suite-result.json",
+  "markdownReportPath": "C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\suite-result.md",
+  "htmlReportPath": "C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\suite-result.html"
+}

@@ -1,0 +1,1 @@
+{"input":{"message":"","triggerType":"rest","parameters":{},"singleTurnOnly":true},"defaults":{"evaluationMode":"deterministic"},"assertions":{},"pathAssertions":{"mustExecute":["INITIALIZE_PAGINATION","INITIALIZE_BATCH_STATE","FETCH_ALL_BATCH_PAGES","FETCH_PBCS_BATCH_PAGE","COLLECT_BATCH_PAGE","ADVANCE_BATCH_PAGE","RETURN_JOURNAL_BATCHES"],"mustNotExecute":[]}}

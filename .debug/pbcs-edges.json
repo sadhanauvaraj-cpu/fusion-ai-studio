@@ -1,0 +1,1 @@
+[{"action":"add","from":"START","to":"INITIALIZE_PAGINATION"},{"action":"add","from":"INITIALIZE_PAGINATION","to":"INITIALIZE_BATCH_STATE"},{"action":"add","from":"INITIALIZE_BATCH_STATE","to":"FETCH_ALL_BATCH_PAGES"},{"action":"add","from":"FETCH_ALL_BATCH_PAGES","to":"RETURN_JOURNAL_BATCHES"}]

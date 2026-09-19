@@ -1,0 +1,310 @@
+{
+  "workflowCode": "XX_FIN_GET_UNPOSTED_PBCS_BATCHES",
+  "specification": {
+    "jsonSchemaName": "Workflow.spec",
+    "jsonSchemaVersion": "1",
+    "inputs": [],
+    "outputSpecification": " ",
+    "agentsValueMappings": [],
+    "dataPipeline": {
+      "pipelineNodes": [
+        {
+          "id": "start",
+          "code": "START",
+          "type": "START",
+          "metadata": {
+            "name": "Start",
+            "description": "Start of data pipeline"
+          },
+          "outcomes": {
+            "success": "1"
+          },
+          "inputs": [],
+          "diagram": {
+            "x": 4568,
+            "y": 5108
+          }
+        },
+        {
+          "id": "1",
+          "code": "INITIALIZE_PAGINATION",
+          "type": "CODE",
+          "metadata": {
+            "name": "Initialize Pagination",
+            "returnType": "object",
+            "sourceCode": "return {offset: 0, hasMore: true, items: [], pages: 0};"
+          },
+          "outcomes": {
+            "success": "2"
+          },
+          "inputs": [],
+          "diagram": {
+            "x": 5206,
+            "y": 5108
+          },
+          "outputSpecification": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"result\": {\n      \"type\": \"object\"\n    },\n    \"timeout\": {\n      \"type\": \"boolean\"\n    },\n    \"error\": {\n      \"type\": \"string\"\n    }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\n    \"result\",\n    \"timeout\",\n    \"error\"\n  ]\n}"
+        },
+        {
+          "id": "2",
+          "code": "INITIALIZE_BATCH_STATE",
+          "type": "SET_FIELDS",
+          "metadata": {
+            "name": "Initialize Batch State"
+          },
+          "outcomes": {
+            "success": "6"
+          },
+          "inputs": [
+            {
+              "id": "2_batchState",
+              "name": "batchState",
+              "value": "{{$context.$nodes.INITIALIZE_PAGINATION.$output.result}}"
+            }
+          ],
+          "diagram": {
+            "x": 5656,
+            "y": 5108
+          }
+        },
+        {
+          "id": "6",
+          "code": "FETCH_ALL_BATCH_PAGES",
+          "type": "WHILE",
+          "metadata": {
+            "name": "Fetch All Batch Pages",
+            "dataPipeline": {
+              "rootNode": "start_6",
+              "pipelineNodes": [
+                {
+                  "id": "start_6",
+                  "code": "START_BATCH_PAGES",
+                  "type": "START",
+                  "metadata": {
+                    "name": "Start Batch Page"
+                  },
+                  "inputs": [],
+                  "outcomes": {
+                    "success": "3"
+                  },
+                  "diagram": {
+                    "x": 4784,
+                    "y": 5108
+                  }
+                },
+                {
+                  "id": "3",
+                  "code": "FETCH_PBCS_BATCH_PAGE",
+                  "type": "BO_FUNCTION",
+                  "metadata": {
+                    "name": "Fetch PBCS Batch Page",
+                    "businessObjectCode": "XX_FIN_PBCS_UNPOSTED_JOURNAL_BATCHES",
+                    "functionName": "getall_journalBatches"
+                  },
+                  "outcomes": {
+                    "success": "4"
+                  },
+                  "inputs": [
+                    {
+                      "id": "3_limit",
+                      "name": "limit",
+                      "type": "integer",
+                      "value": 100
+                    },
+                    {
+                      "id": "3_offset",
+                      "name": "offset",
+                      "type": "string",
+                      "value": "{{$context.$variables.batchState.offset}}"
+                    }
+                  ],
+                  "diagram": {
+                    "x": 4995,
+                    "y": 5249.5
+                  },
+                  "outputSpecification": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"items\": {\n      \"type\": \"array\"\n    },\n    \"count\": {\n      \"type\": \"number\"\n    },\n    \"hasMore\": {\n      \"type\": \"boolean\"\n    },\n    \"limit\": {\n      \"type\": \"number\"\n    },\n    \"offset\": {\n      \"type\": \"number\"\n    },\n    \"links\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"rel\": {\n            \"type\": \"string\"\n          },\n          \"href\": {\n            \"type\": \"string\"\n          },\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"kind\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"rel\",\n          \"href\",\n          \"name\",\n          \"kind\"\n        ],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\n    \"items\",\n    \"count\",\n    \"hasMore\",\n    \"limit\",\n    \"offset\",\n    \"links\"\n  ],\n  \"additionalProperties\": false\n}"
+                },
+                {
+                  "id": "4",
+                  "code": "COLLECT_BATCH_PAGE",
+                  "type": "CODE",
+                  "metadata": {
+                    "name": "Collect Batch Page",
+                    "returnType": "object",
+                    "sourceCode": "const page = $context.$nodes.FETCH_PBCS_BATCH_PAGE.$output; const state = $context.$variables.batchState; if (!page || !Array.isArray(page.items) || typeof page.hasMore !== 'boolean') { throw new Error('Journal batch service returned an invalid page.'); } if (page.offset !== state.offset) { throw new Error('Journal batch service returned an unexpected page offset.'); } if (page.hasMore && page.items.length === 0) { throw new Error('Journal batch service reported more results without advancing pagination.'); } return {offset: state.offset + page.items.length, hasMore: page.hasMore, items: state.items.concat(page.items), pages: state.pages + 1};"
+                  },
+                  "outcomes": {
+                    "success": "5"
+                  },
+                  "inputs": [],
+                  "diagram": {
+                    "x": 5385,
+                    "y": 5072.5
+                  },
+                  "outputSpecification": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"result\": {\n      \"type\": \"object\"\n    },\n    \"timeout\": {\n      \"type\": \"boolean\"\n    },\n    \"error\": {\n      \"type\": \"string\"\n    }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\n    \"result\",\n    \"timeout\",\n    \"error\"\n  ]\n}"
+                },
+                {
+                  "id": "5",
+                  "code": "ADVANCE_BATCH_PAGE",
+                  "type": "SET_FIELDS",
+                  "metadata": {
+                    "name": "Advance Batch Page"
+                  },
+                  "outcomes": {
+                    "success": "end_6"
+                  },
+                  "inputs": [
+                    {
+                      "id": "5_batchState",
+                      "name": "batchState",
+                      "value": "{{$context.$nodes.COLLECT_BATCH_PAGE.$output.result}}"
+                    }
+                  ],
+                  "diagram": {
+                    "x": 5835,
+                    "y": 5072.5
+                  }
+                },
+                {
+                  "id": "end_6",
+                  "code": "END_BATCH_PAGES",
+                  "type": "END",
+                  "metadata": {
+                    "name": "End Batch Page"
+                  },
+                  "inputs": [],
+                  "outcomes": {}
+                }
+              ]
+            }
+          },
+          "outcomes": {
+            "success": "7"
+          },
+          "inputs": [
+            {
+              "id": "6_condition",
+              "name": "condition",
+              "type": "string",
+              "value": "{{$context.$variables.batchState.hasMore}}"
+            }
+          ],
+          "diagram": {
+            "x": 4764,
+            "y": 4957,
+            "width": 1391,
+            "height": 384.5
+          }
+        },
+        {
+          "id": "7",
+          "code": "RETURN_JOURNAL_BATCHES",
+          "type": "CODE",
+          "metadata": {
+            "name": "Return Journal Batches",
+            "returnType": "object",
+            "sourceCode": "const state = $context.$variables.batchState; return {sourceName: 'PBCS', postingStatusFilter: 'Not Posted', count: state.items.length, items: state.items, pagesFetched: state.pages, hasMore: false, message: state.items.length ? 'Retrieved non-posted PBCS journal batches across all accounting periods.' : 'No non-posted PBCS journal batches were found.'};"
+          },
+          "outcomes": {
+            "success": "end"
+          },
+          "inputs": [],
+          "diagram": {
+            "x": 7647,
+            "y": 5108
+          },
+          "outputSpecification": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"result\": {\n      \"type\": \"object\"\n    },\n    \"timeout\": {\n      \"type\": \"boolean\"\n    },\n    \"error\": {\n      \"type\": \"string\"\n    }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\n    \"result\",\n    \"timeout\",\n    \"error\"\n  ]\n}"
+        },
+        {
+          "id": "end",
+          "code": "END",
+          "type": "END",
+          "metadata": {
+            "name": "End",
+            "description": "End of data pipeline"
+          },
+          "outcomes": {},
+          "inputs": [],
+          "diagram": {
+            "x": 5000,
+            "y": 5220
+          }
+        }
+      ],
+      "rootNode": "start",
+      "variables": [
+        {
+          "id": "var_batch_state",
+          "name": "batchState",
+          "type": "object",
+          "scope": "JOB",
+          "typeSpecification": "{\"type\":\"object\",\"properties\":{\"offset\":{\"type\":\"number\"},\"hasMore\":{\"type\":\"boolean\"},\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\"}},\"pages\":{\"type\":\"number\"}},\"required\":[\"offset\",\"hasMore\",\"items\",\"pages\"]}"
+        }
+      ],
+      "errorHandlers": []
+    },
+    "modelConfiguration": null,
+    "humanApprovalFlag": false,
+    "waitFlag": false,
+    "triggers": [
+      {
+        "type": "REST",
+        "inputs": []
+      }
+    ],
+    "deletedTriggerTypes": [],
+    "answerInUserLanguage": false,
+    "userLanguagePrompt": "",
+    "chatExpTPFileUploadEnabledFlag": false,
+    "chatExpThirdPartyDetails": [],
+    "diagram": {
+      "orientation": "horizontal",
+      "commentNodes": []
+    },
+    "defaultModelConfiguration": "ORA_MODEL_CONFIG_PREMIUM_OPEN_AI_GPT_4_1_MINI"
+  },
+  "name": "Get Unposted PBCS Journal Batches",
+  "description": "Retrieve journal batches across all periods using source PBCS and status not Posted filters.",
+  "family": "FIN",
+  "product": "GENERAL_LEDGER",
+  "workflowId": "300022346546014",
+  "ownerName": null,
+  "seededFlag": false,
+  "hiddenFlag": false,
+  "status": "DRAFT",
+  "version": 85584538,
+  "useCaseId": "NA",
+  "accessModifier": "public",
+  "architecture": "data_pipeline",
+  "followupPrompt": null,
+  "firstStarterQuestion": null,
+  "secondStarterQuestion": null,
+  "thirdStarterQuestion": null,
+  "followupEnabledFlag": false,
+  "maxInteractions": null,
+  "customFlag": false,
+  "sourceWorkflowCode": null,
+  "customizationPolicy": null,
+  "emailConfigCode": null,
+  "jobRequestId": null,
+  "aiAppsCompatibleFlag": false,
+  "isTemplate": false,
+  "ownerId": null,
+  "$id": "300022346546014",
+  "$context": {
+    "etag": "2",
+    "links": {
+      "$self": {
+        "href": "https://fa-ekeq-dev20-saasfaprod1.fa.ocs.oraclecloud.com/api/boss/data/objects/ora/commonFusionAI/agents/v1/$en/workflows/300022346546014"
+      }
+    }
+  },
+  "tags": [],
+  "roles": [],
+  "seededRoles": [],
+  "customizedSpecifications": [],
+  "initialTags": [],
+  "initialRoles": [],
+  "header": {
+    "ETag": "\"3\""
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "createdAt": "2026-09-17T13:31:44.188Z",
+  "scope": {
+    "type": "workspace"
+  },
+  "summary": {
+    "workflow": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "needsJudge": 0
+    },
+    "app": null,
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "needsJudge": 0
+  },
+  "summaryText": "Total: 1\nPassed: 1\nFailed: 0\nNeeds Judge: 0\n\nWorkflow suite: app-pkg/ora_fusion_ai_studio/test-reports/workflows/suite-result.html\nApp suite: not run",
+  "reportPath": "app-pkg/ora_fusion_ai_studio/test-reports/suite-result.json",
+  "markdownReportPath": "app-pkg/ora_fusion_ai_studio/test-reports/suite-result.md",
+  "htmlReportPath": "app-pkg/ora_fusion_ai_studio/test-reports/suite-result.html"
+}

@@ -1,0 +1,322 @@
+{
+  "createdAt": "2026-09-17T13:31:44.088Z",
+  "testName": "primary-path",
+  "scenario": {
+    "custom": false,
+    "source": "sync-plan",
+    "id": "primary-path",
+    "kind": "primary-path",
+    "intent": "Record representative environment data once, replay it from the test file, and verify the primary workflow path and final output."
+  },
+  "purpose": "Retrieve all non-posted PBCS journal batches across all accounting periods and verify pagination and the final result.",
+  "workflowCode": "XX_FIN_GET_UNPOSTED_PBCS_BATCHES",
+  "workflow": {
+    "workflowCode": "XX_FIN_GET_UNPOSTED_PBCS_BATCHES",
+    "status": "DRAFT",
+    "version": 85584538
+  },
+  "workflowDefinitionHash": "88dedc225ea1b4ad",
+  "testFile": "app-pkg/ora_fusion_ai_studio/tests/ai/self/oraFusionAiStudio/workflows/xx_fin_get_unposted_pbcs_batches/primary-path.json",
+  "status": "passed",
+  "dataSource": "file",
+  "testData": {
+    "capturePolicy": "record-now",
+    "captureModes": {
+      "FETCH_PBCS_BATCH_PAGE": "raw"
+    },
+    "nodes": {
+      "FETCH_PBCS_BATCH_PAGE": {
+        "nodeType": "BO_FUNCTION",
+        "captureMode": "raw",
+        "responseTruncated": false,
+        "itemCount": 0,
+        "responseBytes": 249
+      }
+    }
+  },
+  "pathAssertions": {
+    "mustExecute": [
+      {
+        "id": "path-must-execute-initialize_pagination",
+        "name": "INITIALIZE_PAGINATION executes",
+        "nodeCode": "INITIALIZE_PAGINATION"
+      },
+      {
+        "id": "path-must-execute-initialize_batch_state",
+        "name": "INITIALIZE_BATCH_STATE executes",
+        "nodeCode": "INITIALIZE_BATCH_STATE"
+      },
+      {
+        "id": "path-must-execute-fetch_all_batch_pages",
+        "name": "FETCH_ALL_BATCH_PAGES executes",
+        "nodeCode": "FETCH_ALL_BATCH_PAGES"
+      },
+      {
+        "id": "path-must-execute-fetch_pbcs_batch_page",
+        "name": "FETCH_PBCS_BATCH_PAGE executes",
+        "nodeCode": "FETCH_PBCS_BATCH_PAGE"
+      },
+      {
+        "id": "path-must-execute-collect_batch_page",
+        "name": "COLLECT_BATCH_PAGE executes",
+        "nodeCode": "COLLECT_BATCH_PAGE"
+      },
+      {
+        "id": "path-must-execute-advance_batch_page",
+        "name": "ADVANCE_BATCH_PAGE executes",
+        "nodeCode": "ADVANCE_BATCH_PAGE"
+      },
+      {
+        "id": "path-must-execute-return_journal_batches",
+        "name": "RETURN_JOURNAL_BATCHES executes",
+        "nodeCode": "RETURN_JOURNAL_BATCHES"
+      }
+    ],
+    "mustNotExecute": []
+  },
+  "evaluationMode": "deterministic",
+  "judgeMinimumScore": 4,
+  "judgeAssertions": [],
+  "deterministic": {
+    "passed": true,
+    "failures": [],
+    "checks": [
+      {
+        "category": "workflow",
+        "assertion": "finishReason",
+        "expected": "Workflow execution must not finish with error.",
+        "passed": true
+      },
+      {
+        "category": "output",
+        "assertion": "nonEmptyOutput",
+        "expected": "Workflow execution must produce a final answer.",
+        "passed": true
+      },
+      {
+        "category": "path",
+        "assertion": "mustExecute",
+        "assertionId": "path-must-execute-initialize_pagination",
+        "assertionName": "INITIALIZE_PAGINATION executes",
+        "expected": "INITIALIZE_PAGINATION",
+        "observed": "Executed",
+        "passed": true
+      },
+      {
+        "category": "path",
+        "assertion": "mustExecute",
+        "assertionId": "path-must-execute-initialize_batch_state",
+        "assertionName": "INITIALIZE_BATCH_STATE executes",
+        "expected": "INITIALIZE_BATCH_STATE",
+        "observed": "Executed",
+        "passed": true
+      },
+      {
+        "category": "path",
+        "assertion": "mustExecute",
+        "assertionId": "path-must-execute-fetch_all_batch_pages",
+        "assertionName": "FETCH_ALL_BATCH_PAGES executes",
+        "expected": "FETCH_ALL_BATCH_PAGES",
+        "observed": "Executed",
+        "passed": true
+      },
+      {
+        "category": "path",
+        "assertion": "mustExecute",
+        "assertionId": "path-must-execute-fetch_pbcs_batch_page",
+        "assertionName": "FETCH_PBCS_BATCH_PAGE executes",
+        "expected": "FETCH_PBCS_BATCH_PAGE",
+        "observed": "Executed",
+        "passed": true
+      },
+      {
+        "category": "path",
+        "assertion": "mustExecute",
+        "assertionId": "path-must-execute-collect_batch_page",
+        "assertionName": "COLLECT_BATCH_PAGE executes",
+        "expected": "COLLECT_BATCH_PAGE",
+        "observed": "Executed",
+        "passed": true
+      },
+      {
+        "category": "path",
+        "assertion": "mustExecute",
+        "assertionId": "path-must-execute-advance_batch_page",
+        "assertionName": "ADVANCE_BATCH_PAGE executes",
+        "expected": "ADVANCE_BATCH_PAGE",
+        "observed": "Executed",
+        "passed": true
+      },
+      {
+        "category": "path",
+        "assertion": "mustExecute",
+        "assertionId": "path-must-execute-return_journal_batches",
+        "assertionName": "RETURN_JOURNAL_BATCHES executes",
+        "expected": "RETURN_JOURNAL_BATCHES",
+        "observed": "Executed",
+        "passed": true
+      }
+    ]
+  },
+  "judge": {
+    "status": "skipped",
+    "minimumScore": 4,
+    "reason": "evaluation-mode deterministic skips judge evaluation."
+  },
+  "runtimeMetrics": {
+    "durationMs": 1301,
+    "workflowTimeMs": 46,
+    "tokenUsage": {
+      "status": "not-emitted-by-runtime",
+      "aggregate": {
+        "sourceFields": []
+      },
+      "nodes": {}
+    },
+    "nodeDurations": {
+      "FETCH_PBCS_BATCH_PAGE": {
+        "totalNodeTime": 46,
+        "details": []
+      }
+    },
+    "observed": {},
+    "aiUnits": {
+      "status": "no-token-data"
+    }
+  },
+  "startedAt": "2026-09-17T13:31:42.787Z",
+  "finishedAt": "2026-09-17T13:31:44.088Z",
+  "durationMs": 1301,
+  "run": {
+    "workflowCode": "XX_FIN_GET_UNPOSTED_PBCS_BATCHES",
+    "message": "",
+    "input": {
+      "message": "",
+      "triggerType": "rest",
+      "parameters": {},
+      "singleTurnOnly": true
+    },
+    "conversationId": "workflow-test-primary-path-c4352f00-6486-47c8-b9fe-f5ceabc5f709",
+    "jobId": "913e1eb9-346f-4299-a9db-a935810da46c",
+    "finalOutput": "{\"result\":{\"sourceName\":\"PBCS\",\"postingStatusFilter\":\"Not Posted\",\"count\":0,\"items\":[],\"pagesFetched\":1,\"hasMore\":false,\"message\":\"No non-posted PBCS journal batches were found.\"},\"console\":\"\",\"timedOut\":false}",
+    "finishReason": "stop",
+    "rawEventCount": 12,
+    "executionTrace": [
+      {
+        "sequence": 1,
+        "nodeCode": "START",
+        "eventType": "NODE_EXECUTED"
+      },
+      {
+        "sequence": 2,
+        "nodeCode": "INITIALIZE_PAGINATION",
+        "eventType": "NODE_EXECUTED"
+      },
+      {
+        "sequence": 3,
+        "nodeCode": "INITIALIZE_BATCH_STATE",
+        "eventType": "NODE_EXECUTED"
+      },
+      {
+        "sequence": 4,
+        "nodeCode": "FETCH_ALL_BATCH_PAGES",
+        "eventType": "NODE_START"
+      },
+      {
+        "sequence": 5,
+        "nodeCode": "START_BATCH_PAGES",
+        "eventType": "NODE_EXECUTED"
+      },
+      {
+        "sequence": 6,
+        "nodeCode": "FETCH_PBCS_BATCH_PAGE",
+        "eventType": "NODE_START"
+      },
+      {
+        "sequence": 7,
+        "nodeCode": "COLLECT_BATCH_PAGE",
+        "eventType": "NODE_EXECUTED"
+      },
+      {
+        "sequence": 8,
+        "nodeCode": "ADVANCE_BATCH_PAGE",
+        "eventType": "NODE_EXECUTED"
+      },
+      {
+        "sequence": 9,
+        "nodeCode": "RETURN_JOURNAL_BATCHES",
+        "eventType": "NODE_EXECUTED"
+      }
+    ],
+    "nodeResults": {
+      "START": {
+        "eventTypes": [
+          "NODE_EXECUTED"
+        ],
+        "inputCaptured": true,
+        "outputCaptured": true
+      },
+      "INITIALIZE_PAGINATION": {
+        "eventTypes": [
+          "NODE_EXECUTED"
+        ],
+        "inputCaptured": true,
+        "outputCaptured": true
+      },
+      "INITIALIZE_BATCH_STATE": {
+        "eventTypes": [
+          "NODE_EXECUTED"
+        ],
+        "inputCaptured": true,
+        "outputCaptured": true
+      },
+      "FETCH_ALL_BATCH_PAGES": {
+        "eventTypes": [
+          "NODE_START",
+          "NODE_END"
+        ],
+        "inputCaptured": true,
+        "outputCaptured": true
+      },
+      "START_BATCH_PAGES": {
+        "eventTypes": [
+          "NODE_EXECUTED"
+        ],
+        "inputCaptured": true,
+        "outputCaptured": true
+      },
+      "FETCH_PBCS_BATCH_PAGE": {
+        "eventTypes": [
+          "NODE_START",
+          "NODE_END"
+        ],
+        "inputCaptured": true,
+        "outputCaptured": true
+      },
+      "COLLECT_BATCH_PAGE": {
+        "eventTypes": [
+          "NODE_EXECUTED"
+        ],
+        "inputCaptured": true,
+        "outputCaptured": true
+      },
+      "ADVANCE_BATCH_PAGE": {
+        "eventTypes": [
+          "NODE_EXECUTED"
+        ],
+        "inputCaptured": true,
+        "outputCaptured": true
+      },
+      "RETURN_JOURNAL_BATCHES": {
+        "eventTypes": [
+          "NODE_EXECUTED"
+        ],
+        "inputCaptured": true,
+        "outputCaptured": true
+      }
+    }
+  },
+  "reportPath": "C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\primary-path\\result.json",
+  "markdownReportPath": "C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\primary-path\\result.md",
+  "htmlReportPath": "C:\\001DDrive\\AI Agent CLI\\fusion-ai-studio\\app-pkg\\ora_fusion_ai_studio\\test-reports\\workflows\\xx_fin_get_unposted_pbcs_batches\\primary-path\\result.html"
+}

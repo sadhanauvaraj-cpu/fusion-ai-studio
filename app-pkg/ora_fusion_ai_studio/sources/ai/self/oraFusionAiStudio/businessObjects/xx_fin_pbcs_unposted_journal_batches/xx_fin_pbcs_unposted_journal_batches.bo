@@ -1,0 +1,78 @@
+{
+  "supportedObjectId": "300022346546029",
+  "$context": {
+    "etag": "3"
+  },
+  "name": "PBCS Unposted Journal Batches",
+  "description": "Retrieve journal batches across all accounting periods restricted to journal source PBCS and non-posted batch statuses, with pagination.",
+  "objectCode": "XX_FIN_PBCS_UNPOSTED_JOURNAL_BATCHES",
+  "family": "FIN",
+  "product": "GENERAL_LEDGER",
+  "objectSource": "ADF_BC",
+  "restResourcePath": "/fscmRestApi/resources/11.13.18.05/journalBatches",
+  "restResourceIdentifier": "-1",
+  "seededFlag": false,
+  "mandatoryFlag": false,
+  "objectProperties": {
+    "jsonSchemaName": "supportedObjectProperties",
+    "jsonSchemaVersion": 1,
+    "tools": [
+      {
+        "name": "getall_journalBatches",
+        "description": "Get a page of journal batches from all periods where UserJeSourceName equals PBCS and Status is not P (Posted). Read only. Follow hasMore using offset and limit.",
+        "operationId": "getall_journalBatches",
+        "operationType": "GET",
+        "resourcePath": "/fscmRestApi/resources/11.13.18.05/journalBatches?q=UserJeSourceName%3D%27PBCS%27%20and%20Status%21%3D%27P%27&onlyData=true&orderBy=JeBatchId:asc&limit={limit}&offset={offset}&fields=JeBatchId,BatchName,DefaultPeriodName,Status,StatusMeaning,UserJeSourceName,ApprovalStatusMeaning,CompletionStatusMeaning,ErrorMessage,RunningTotalAccountedDr,RunningTotalAccountedCr,PostedDate",
+        "resourceType": "ADF_BC_FIXED_QUERY",
+        "useNativeAuthentication": true,
+        "type": "BUS_OBJECT",
+        "parameterDefinitions": [
+          {
+            "name": "limit",
+            "dataType": "integer",
+            "description": "Maximum batches per page; use 100 for this workflow.",
+            "id": 2,
+            "isToken": true,
+            "location": "query",
+            "source": "placeholder",
+            "defaultValue": "100"
+          },
+          {
+            "name": "offset",
+            "dataType": "integer",
+            "description": "Zero-based page offset, initially 0; advance by the returned page count.",
+            "id": 3,
+            "isToken": true,
+            "location": "query",
+            "source": "placeholder",
+            "defaultValue": "0"
+          }
+        ],
+        "headers": {
+          "REST-Framework-Version": "4"
+        },
+        "sampleQueries": [
+          {
+            "description": "This example response shows a paginated collection of journal batches filtered by UserJeSourceName equal to PBCS and non-posted Status, with fields such as JeBatchId, BatchName, DefaultPeriodName, StatusMeaning, and RunningTotalAccountedDr/Cr. It illustrates an empty result set with no journal batches returned, including pagination details like limit, offset, count, and hasMore.",
+            "query": {
+              "items": [],
+              "count": 0,
+              "hasMore": false,
+              "limit": 100,
+              "offset": 0,
+              "links": [
+                {
+                  "rel": "self",
+                  "href": "https://fa-ekeq-dev20-saasfaprod1.fa.ocs.oraclecloud.com:443/fscmRestApi/resources/11.13.18.05/journalBatches",
+                  "name": "journalBatches",
+                  "kind": "collection"
+                }
+              ]
+            },
+            "sampleType": "response"
+          }
+        ]
+      }
+    ]
+  }
+}

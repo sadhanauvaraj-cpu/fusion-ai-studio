@@ -1,0 +1,1 @@
+{"functionName":"getall_journalBatches","kind":"token","parameterName":"offset","patch":{"dataType":"integer","description":"Zero-based page offset, initially 0; advance by the returned page count.","defaultValue":"0"}}

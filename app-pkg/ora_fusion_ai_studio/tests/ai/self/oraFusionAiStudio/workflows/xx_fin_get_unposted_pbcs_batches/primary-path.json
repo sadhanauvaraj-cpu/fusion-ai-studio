@@ -1,0 +1,126 @@
+{
+  "testName": "primary-path",
+  "scenario": {
+    "custom": false,
+    "source": "sync-plan",
+    "id": "primary-path",
+    "kind": "primary-path",
+    "intent": "Record representative environment data once, replay it from the test file, and verify the primary workflow path and final output."
+  },
+  "workflow": {
+    "workflowCode": "XX_FIN_GET_UNPOSTED_PBCS_BATCHES"
+  },
+  "authoring": {
+    "source": "model-authored",
+    "createdAt": "2026-09-17T10:51:08.137Z",
+    "userPrompt": "Retrieve all non-posted PBCS journal batches across all accounting periods and verify pagination and the final result."
+  },
+  "input": {
+    "message": "",
+    "triggerType": "rest",
+    "parameters": {},
+    "singleTurnOnly": true
+  },
+  "defaults": {
+    "dataSource": "file",
+    "evaluationMode": "deterministic"
+  },
+  "assertions": {
+    "contains": [],
+    "notContains": []
+  },
+  "pathAssertions": {
+    "mustExecute": [
+      {
+        "id": "path-must-execute-initialize_pagination",
+        "name": "INITIALIZE_PAGINATION executes",
+        "nodeCode": "INITIALIZE_PAGINATION"
+      },
+      {
+        "id": "path-must-execute-initialize_batch_state",
+        "name": "INITIALIZE_BATCH_STATE executes",
+        "nodeCode": "INITIALIZE_BATCH_STATE"
+      },
+      {
+        "id": "path-must-execute-fetch_all_batch_pages",
+        "name": "FETCH_ALL_BATCH_PAGES executes",
+        "nodeCode": "FETCH_ALL_BATCH_PAGES"
+      },
+      {
+        "id": "path-must-execute-fetch_pbcs_batch_page",
+        "name": "FETCH_PBCS_BATCH_PAGE executes",
+        "nodeCode": "FETCH_PBCS_BATCH_PAGE"
+      },
+      {
+        "id": "path-must-execute-collect_batch_page",
+        "name": "COLLECT_BATCH_PAGE executes",
+        "nodeCode": "COLLECT_BATCH_PAGE"
+      },
+      {
+        "id": "path-must-execute-advance_batch_page",
+        "name": "ADVANCE_BATCH_PAGE executes",
+        "nodeCode": "ADVANCE_BATCH_PAGE"
+      },
+      {
+        "id": "path-must-execute-return_journal_batches",
+        "name": "RETURN_JOURNAL_BATCHES executes",
+        "nodeCode": "RETURN_JOURNAL_BATCHES"
+      }
+    ],
+    "mustNotExecute": []
+  },
+  "pathBinding": {
+    "derivedFrom": "live_execution",
+    "pathSource": "observed",
+    "inputHash": "25faff37a51ea2d8",
+    "workflowDefinitionHash": "88dedc225ea1b4ad",
+    "observedAt": "2026-09-17T13:31:14.128Z",
+    "observedTerminalNodeCode": "RETURN_JOURNAL_BATCHES",
+    "workflowStatus": "DRAFT",
+    "workflowVersion": 85584538
+  },
+  "judge": {
+    "minimumScore": 4,
+    "expectedOutcome": "",
+    "rubric": []
+  },
+  "testData": {
+    "status": "ready",
+    "capturePolicy": "record-now",
+    "recordedAt": "2026-09-17T13:31:14.128Z",
+    "nodes": {
+      "FETCH_PBCS_BATCH_PAGE": {
+        "nodeType": "BO_FUNCTION",
+        "capture": {
+          "mode": "raw",
+          "responseTruncated": false,
+          "jobId": "5ed00da3-5651-45eb-9ca3-46e6b22abae6",
+          "finishReason": "stop"
+        },
+        "metadata": {
+          "businessObjectCode": "XX_FIN_PBCS_UNPOSTED_JOURNAL_BATCHES",
+          "functionName": "getall_journalBatches"
+        },
+        "input": {
+          "limit": 100,
+          "offset": 0
+        },
+        "response": {
+          "count": 0,
+          "hasMore": false,
+          "items": [],
+          "limit": 100,
+          "links": [
+            {
+              "href": "https://fa-ekeq-dev20-saasfaprod1.fa.ocs.oraclecloud.com:443/fscmRestApi/resources/11.13.18.05/journalBatches",
+              "kind": "collection",
+              "name": "journalBatches",
+              "rel": "self"
+            }
+          ],
+          "offset": 0
+        }
+      }
+    }
+  }
+}
